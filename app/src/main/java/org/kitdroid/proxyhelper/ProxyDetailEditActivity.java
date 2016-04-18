@@ -5,6 +5,7 @@ import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.app.LoaderManager.LoaderCallbacks;
 import android.content.Loader;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.Build;
 import android.os.Bundle;
@@ -21,6 +22,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import org.kitdroid.helper.ContextMate;
+import org.kitdroid.proxyhelper.proxy.ProxyEntity;
+import org.kitdroid.proxyhelper.proxy.ProxyManager;
 import org.kitdroid.util.IntentUtils;
 import org.kitdroid.util.StringUtils;
 
@@ -122,10 +126,12 @@ public class ProxyDetailEditActivity extends AppCompatActivity implements Loader
             // form field with an error.
             focusView.requestFocus();
         } else {
-            // Show a progress spinner, and kick off a background task to
-            // perform the user login attempt.
-            showProgress(true);
-            // TODO 保存Item并更新类表
+            ProxyEntity entity = new ProxyEntity();
+            entity.setHost(host);
+            entity.setPort(StringUtils.parseInt(port, 80));
+            ProxyManager.getInstance().addProxy(entity);
+            setResult(RESULT_OK);
+            finish();
         }
     }
 

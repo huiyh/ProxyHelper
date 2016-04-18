@@ -2,6 +2,7 @@ package org.kitdroid.helper;
 
 import android.app.Application;
 import android.content.Context;
+import android.content.SharedPreferences;
 
 import org.kitdroid.proxyhelper.CustomApplication;
 
@@ -20,5 +21,13 @@ public class ContextMate  {
 
     public static Application getApplication(){
         return sApplication;
+    }
+
+    /**
+     * name is global
+     * @return
+     */
+    public static SharedPreferences getPreferences(){
+        return sApplication.getSharedPreferences("global",Context.MODE_PRIVATE);
     }
 }

@@ -1,20 +1,17 @@
 package org.kitdroid.proxyhelper;
 
-import android.app.AlertDialog;
-import android.app.AlertDialog.Builder;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ListView;
@@ -26,7 +23,9 @@ import org.kitdroid.util.IntentUtils;
 
 public class MainActivity extends AppCompatActivity implements OnItemLongClickListener {
 
+    public static final int REQUEST_CODE_EDIT_PROXY = 1;
     private ListView mListView;
+    private ProxyConfigAdatper adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,13 +38,17 @@ public class MainActivity extends AppCompatActivity implements OnItemLongClickLi
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                IntentUtils.startActivity(getActivity(),ProxyDetailEditActivity.class);
+                IntentUtils.startActivityForResult(getActivity(), ProxyDetailEditActivity.class, REQUEST_CODE_EDIT_PROXY);
+
             }
         });
 
+
         mListView = (ListView) findViewById(R.id.listView);
-        mListView.setAdapter(new ProxyConfigAdatper(LayoutInflater.from(getActivity())));
         mListView.setOnItemLongClickListener(this);
+
+        adapter = new ProxyConfigAdatper(LayoutInflater.from(getActivity()));
+        mListView.setAdapter(adapter);
     }
 
     @Override
@@ -56,24 +59,45 @@ public class MainActivity extends AppCompatActivity implements OnItemLongClickLi
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
+        switch (item.getItemId()) {
+            case R.id.action_settings: {
+                IntentUtils.startActivity(getActivity(), SettingsActivity.class);
+                return true;
+            }
+            case R.id.action_wificonfig: {
+                IntentUtils.startActivity(getActivity(), WiFiConfigListActivity.class);
+                return true;
+            }
+            case R.id.action_about: {
+                IntentUtils.startActivity(getActivity(), SettingsAboutActivity.class);
+                return true;
+            }
+            default: {
+                return super.onOptionsItemSelected(item);
+            }
+        }
+    }
 
-        if (id == R.id.action_settings) {
-            IntentUtils.startActivity(getActivity(),SettingsActivity.class);
-            return true;
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode != RESULT_OK){
+            return;
         }
 
-        if (id == R.id.action_wificonfig) {
-            IntentUtils.startActivity(getActivity(),WiFiConfigListActivity.class);
-            return true;
-        }
+        switch (requestCode){
+            case REQUEST_CODE_EDIT_PROXY:{
+                onProxysDataChanged();
+                break;
+            }
+            default:{
 
-        if (id == R.id.action_about) {
-            IntentUtils.startActivity(getActivity(),SettingsAboutActivity.class);
-            return true;
+            }
         }
+    }
 
-        return super.onOptionsItemSelected(item);
+    private void onProxysDataChanged() {
+        adapter.notifyDataSetChanged();
     }
 
     @NonNull
@@ -91,9 +115,8 @@ public class MainActivity extends AppCompatActivity implements OnItemLongClickLi
         DialogHelper.showConfirmDialog(getActivity(), "删除代理:", new OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                Toaster.showShort(getActivity(),"Del");
+                Toaster.showShort(getActivity(), "Del");
             }
         });
-
     }
 }

@@ -106,6 +106,10 @@ public class IntentUtils {
         Intent intent = new Intent(activity, cls);
         activity.startActivity(intent);
     }
+    public static void startActivityForResult(@NonNull Activity activity, @NonNull Class<? extends Activity> cls, int requestCode) {
+        Intent intent = new Intent(activity, cls);
+        activity.startActivityForResult(intent,requestCode);
+    }
 
     private static void i(String msg){
         Logger.i(TAG,msg);
