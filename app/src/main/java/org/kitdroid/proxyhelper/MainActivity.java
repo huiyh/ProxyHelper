@@ -7,13 +7,20 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemLongClickListener;
+import android.widget.ListView;
 
+import org.kitdroid.proxyhelper.adapter.ProxyConfigAdatper;
 import org.kitdroid.util.IntentUtils;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements OnItemLongClickListener {
+
+    private ListView mListView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,6 +36,10 @@ public class MainActivity extends AppCompatActivity {
                 IntentUtils.startActivity(getActivity(),ProxyDetailEditActivity.class);
             }
         });
+
+        mListView = (ListView) findViewById(R.id.listView);
+        mListView.setAdapter(new ProxyConfigAdatper(LayoutInflater.from(getActivity())));
+        mListView.setOnItemLongClickListener(this);
     }
 
     @Override
@@ -62,5 +73,11 @@ public class MainActivity extends AppCompatActivity {
     @NonNull
     private MainActivity getActivity() {
         return MainActivity.this;
+    }
+
+    @Override
+    public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+        IntentUtils.startActivity(getActivity(),ProxyDetailEditActivity.class);
+        return false;
     }
 }
