@@ -1,5 +1,9 @@
 package org.kitdroid.proxyhelper;
 
+import android.app.AlertDialog;
+import android.app.AlertDialog.Builder;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -15,6 +19,8 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ListView;
 
+import org.kitdroid.helper.DialogHelper;
+import org.kitdroid.helper.Toaster;
 import org.kitdroid.proxyhelper.adapter.ProxyConfigAdatper;
 import org.kitdroid.util.IntentUtils;
 
@@ -77,7 +83,17 @@ public class MainActivity extends AppCompatActivity implements OnItemLongClickLi
 
     @Override
     public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-        IntentUtils.startActivity(getActivity(),ProxyDetailEditActivity.class);
+        showDelDailog();
         return false;
+    }
+
+    private void showDelDailog() {
+        DialogHelper.showConfirmDialog(getActivity(), "删除代理:", new OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Toaster.showShort(getActivity(),"Del");
+            }
+        });
+
     }
 }
