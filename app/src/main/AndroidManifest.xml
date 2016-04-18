@@ -2,6 +2,11 @@
 <manifest package="org.kitdroid.proxyhelper"
           xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <!-- To auto-complete the email text field in the login form with the user's emails -->
+    <uses-permission android:name="android.permission.GET_ACCOUNTS"/>
+    <uses-permission android:name="android.permission.READ_PROFILE"/>
+    <uses-permission android:name="android.permission.READ_CONTACTS"/>
+
     <application
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
@@ -17,6 +22,21 @@
 
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
+        </activity>
+        <activity
+            android:name=".SettingsActivity"
+            android:label="@string/title_activity_settings">
+        </activity>
+        <activity android:name=".SettingsAboutActivity">
+        </activity>
+        <activity
+            android:name=".WiFiConfigListActivity"
+            android:label="@string/title_activity_wi_fi_config_list"
+            android:theme="@style/AppTheme.NoActionBar">
+        </activity>
+        <activity
+            android:name=".ProxyDetailEditActivity"
+            android:label="@string/title_activity_proxy_detail_edit">
         </activity>
     </application>
 
